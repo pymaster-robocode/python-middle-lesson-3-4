@@ -183,7 +183,7 @@
       alert("Enter valid id!")
       return
     }
-    if (confirm("Ви впевнені, що хочете видалити курс?")) {
+    if (confirm("Delete selected course?")) {
         await fetch(BASE_URL+`/courses/${resEl}`, {
             method: 'DELETE',
             headers: {
@@ -193,7 +193,7 @@
         .then(async response => {
           const resp = await response.json()
             if (response.ok) {
-                textRes.innerHTML = "Курс видалено!"
+                textRes.innerHTML = "Course deleted!"
             } else {
                 textRes.innerHTML = `${resp.detail}`;
             }
