@@ -32,6 +32,6 @@ def delete_course(course_id: int, user: str = Depends(get_current_user)):
     cur.execute("DELETE FROM courses WHERE id=? AND owner=?", (course_id, user))
     conn.commit()
     if cur.rowcount == 0:
-        raise HTTPException(status_code=404, detail="Курс не знайдено або доступ заборонено")
+        raise HTTPException(status_code=404, detail="Course not found or access is denied")
 
-    return {"detail": "Курс видалено"}
+    return {"detail": "Course deleted!"}
