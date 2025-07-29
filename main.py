@@ -8,10 +8,10 @@ from models import create_tables
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],       # або ["*"]
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["*"],         # дозволені HTTP методи (GET, POST, etc)
-    allow_headers=["*"],         # дозволені заголовки
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 app.include_router(users_router)
 app.include_router(courses_router)

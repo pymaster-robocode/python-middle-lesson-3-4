@@ -32,12 +32,6 @@
     <pre id="login-result"></pre>
   </section>
 
-  <section id="me-section">
-    <h2>Current User (/me)</h2>
-    <button onclick="getMe()">Get My Info</button>
-    <pre id="me-result"></pre>
-  </section>
-
   <section id="courses-section">
     <h2>Courses</h2>
     <input type="text" id="course-title" placeholder="Course Title" />
@@ -48,8 +42,7 @@
   </section>
 
 <script>
-  const BASE_URL = "http://127.0.0.1:8000";
-
+  const BASE_URL = 'http://127.0.0.1:8000'
   let token = '';
   async function register() {
     const username = document.getElementById('reg-username').value;
@@ -62,7 +55,7 @@
     }
 
     try {
-      const res = await fetch('/register', {
+      const res = await fetch(BASE_URL+'/register', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({username, password})
@@ -90,7 +83,7 @@
     params.append('password', password);
 
     try {
-      const res = await fetch('/login', {
+      const res = await fetch(BASE_URL+'/login', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({username, password})
@@ -117,7 +110,7 @@
       return;
     }
     try {
-      const res = await apiFetch('/courses/', {
+      const res = await fetch(BASE_URL+'/courses/', {
         method: 'POST',
         headers: {
           'Authorization': 'Bearer ' + token,
@@ -140,7 +133,7 @@
       return;
     }
     try {
-      const res = await fetch('/courses/', {
+      const res = await fetch(BASE_URL+'/courses/', {
         headers: { 'Authorization': 'Bearer ' + token }
       });
       const data = await res.json();
