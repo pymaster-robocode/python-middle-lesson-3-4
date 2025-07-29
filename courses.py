@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from auth import get_current_user
 from database import get_db
@@ -24,3 +24,14 @@ def get_courses(user: str = Depends(get_current_user)):
     cur = conn.cursor()
     cur.execute("SELECT * FROM courses WHERE owner=?", (user,))
     return cur.fetchall()
+
+@router.delete("/courses/{course_id}")
+def delete_course(course_id: int, user: str = Depends(get_current_user)):
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute("DELETE FROM courses WHERE id=? AND owner=?", (course_id, user))
+    conn.commit()
+    if cur.rowcount == 0:
+        raise HTTPException(status_code=404, detail="Курс не знайдено або доступ заборонено")
+
+    return {"detail": "Курс видалено"}

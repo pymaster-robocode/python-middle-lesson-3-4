@@ -47,6 +47,13 @@
     <pre id="courses-result"></pre>
   </section>
 
+  <section id="delete-course">
+    <h2>Delete Course</h2>
+    <input type="text" id="course-id" placeholder="Course id" />
+    <pre id="delete-course-result"></pre>
+    <button onclick="deleteCourse()">Delete course</button>
+  </section>
+
 <script>
   const BASE_URL = 'http://127.0.0.1:8000'
   let token = '';
@@ -167,6 +174,32 @@
       resEl.textContent = 'Error: ' + e.message;
     }
   }
+
+
+  async function deleteCourse(courseId) {
+    const resEl = Number(document.getElementById('course-id').value);
+    const textRes = document.getElementById('delete-course-result')
+    if (!resEl) {
+      alert("Enter valid id!")
+      return
+    }
+    if (confirm("Ви впевнені, що хочете видалити курс?")) {
+        await fetch(BASE_URL+`/courses/${resEl}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        })
+        .then(async response => {
+          const resp = await response.json()
+            if (response.ok) {
+                textRes.innerHTML = "Курс видалено!"
+            } else {
+                textRes.innerHTML = `${resp.detail}`;
+            }
+        });
+    }
+}
 </script>
 
 </body>
