@@ -1,7 +1,7 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 from database import get_db
-from auth import create_access_token
+from auth import create_access_token, get_current_user
 from passlib.hash import bcrypt
 
 router = APIRouter()
@@ -32,3 +32,12 @@ def login(user: User):
         raise HTTPException(status_code=400, detail="Invalid credentials")
     token = create_access_token({"username": user.username})
     return {"access_token": token, "token_type": "bearer"}
+
+
+@router.get("/me") # Task
+def read_me(username: str = Depends(get_current_user)):
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM courses WHERE owner=?", (username,))
+    data = len(cur.fetchall())
+    return {"username": username, "courses": data}

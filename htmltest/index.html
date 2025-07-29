@@ -7,7 +7,7 @@
     body { font-family: Arial, sans-serif; max-width: 700px; margin: 20px auto; }
     input, button, textarea { font-size: 1em; padding: 5px; margin: 5px 0; width: 100%; box-sizing: border-box; }
     button { width: auto; }
-    section { margin-bottom: 30px; border-bottom: 1px solid #ccc; padding-bottom: 20px; }
+    section { margin-bottom: 30px; border-bottom: 1px solid #c16262; padding-bottom: 20px; }
     pre { background: #eee; padding: 10px; max-height: 200px; overflow-y: auto; }
     label { font-weight: bold; display: block; margin-top: 10px; }
   </style>
@@ -30,6 +30,12 @@
     <input type="password" id="login-password" placeholder="Password" />
     <button onclick="login()">Login</button>
     <pre id="login-result"></pre>
+  </section>
+
+  <section id="me-section">
+    <h2>Get me and courses count</h2>
+    <button onclick="get_me()">Get</button>
+    <pre id="me-result"></pre>
   </section>
 
   <section id="courses-section">
@@ -134,6 +140,24 @@
     }
     try {
       const res = await fetch(BASE_URL+'/courses/', {
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || JSON.stringify(data));
+      resEl.textContent = JSON.stringify(data, null, 2);
+    } catch (e) {
+      resEl.textContent = 'Error: ' + e.message;
+    }
+  }
+
+  async function get_me() {
+    const resEl = document.getElementById('me-result');
+    if (!token) {
+      resEl.textContent = 'You must login first';
+      return;
+    }
+    try {
+      const res = await fetch(BASE_URL+'/me', {
         headers: { 'Authorization': 'Bearer ' + token }
       });
       const data = await res.json();
